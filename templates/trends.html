@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block title %} {{ super() }} {% endblock %}
+{% block head %}
+    {{ super() }}
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+{% endblock %}
+{% block body %}
+
+    <div id="leftMenuDiv" class="jumbotron left-menu-wrapper">
+        <form action="/GenerateChart" method="post">
+
+            <div class="form-group">
+                <label for="exampleFormControlSelect1">Select province:</label>
+                <select name="provinceID" class="form-control" id="provinceID">
+                    {% for province in provinces %}
+                        <option value="{{ province }}" {% if sel_province == province %} selected {% endif %} >{{ province }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlSelect1">Select X-axis:</label>
+                <select name="xParams" class="form-control" id="xID">>
+                    <option value="bedrooms" {% if sel_x == "bedrooms" %} selected {% endif %} >bedrooms</option>
+                    <option value="room_type" {% if sel_x == "room_type" %} selected {% endif %}>room_type</option>
+                    <option value="neighbourhood" {% if sel_x == "neighbourhood" %} selected {% endif %}>neighbourhood</option>
+                    <option value="availability_30" {% if sel_x == "availability_30" %} selected {% endif %}>availability_30</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlSelect1">Select Y-axis:</label>
+                <select name="yParams" class="form-control" id="yID">
+                    <option value="room_type" {% if sel_y == "room_type" %} selected {% endif %}>room_type</option>
+                    <option value="bedrooms" {% if sel_y == "bedrooms" %} selected {% endif %}>bedrooms</option>
+                    <option value="neighbourhood" {% if sel_y == "neighbourhood" %} selected {% endif %}>neighbourhood</option>
+                    <option value="availability_30" {% if sel_y == "availability_30" %} selected {% endif %}>availability_30</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn submit-airbnb-button">Generate Chart
+            </button>
+        </form>
+
+    </div>
+
+    <div id="mainContainer" style="margin-left: 400px">
+
+    </div>
+    <script>
+        var graphs = {{plot | safe}};
+        Plotly.plot('mainContainer',graphs,{});
+    </script>
+{% endblock %}`

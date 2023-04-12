@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block title %} {{ super() }} {% endblock %}
+{% block head %} {{ super() }} {% endblock %}
+{% block body %}
+
+<div id="leftMenuDiv" class="card index-left-menu-wrapper">
+    <img src="/static/images/airbnb.jpg" class="card-img-top" alt="logo">
+    <div class="card-body">
+        <h5 class="card-title">Airbnb Price Prediction</h5>
+        <p class="card-text">Stop guessing and start predicting! Our Airbnb price prediction tool takes the uncertainty
+            out of booking your next
+            vacation rental</p>
+        <p class="card-text">Discover the best deals on Airbnb rentals with our price prediction tool. You'll never
+            overpay for a stay again</p>
+        <a href="/PricePrediction" class="price-predition-anchor">Click here to start prediction</a>
+    </div>
+</div>
+
+<div id="mainContainer">
+    <iframe width="75%" height=600 src="{{ url_for('static', filename='dashboard-map5.html') }}"></iframe>
+</div>
+
+{% endblock %}

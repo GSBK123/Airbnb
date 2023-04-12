@@ -1,0 +1,167 @@
+h1 {
+    text-align:center;
+    color: rebeccapurple;
+    font-size: medium;
+}
+
+#accordionDiv {
+    max-width: 800px;
+    margin: auto;
+}
+
+h2 {
+    max-width: 300px;
+    margin: auto;
+}
+
+ul {
+  width:1500px;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #428bca;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  color: white;
+  display: block;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+
+}
+
+.active {
+  background-color: #28c76f;
+}
+
+#mapid {
+	height: 500px;
+	width: 80%;
+    display: inline-block;
+}
+
+.similar-airbnb {
+    display: inline-block;
+    overflow-y: auto;
+    vertical-align: top;
+    width: 18%;
+    /* text-align: center; */
+    border: 1px solid grey;
+    height: 500px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+#autocomplete {
+	width: 400px;
+    padding: 5px;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid grey;
+}
+
+#autocomplete:active {
+	transition: 0.2s;
+	border: 1px solid blue !important;
+}
+
+.map-wrapper {
+    width: 95%;
+    margin-left: 30px;
+    padding-top: 25px;
+}
+
+.map-wrapper input {
+    margin-bottom: 25px;
+}
+
+.similar-airbnb h4{
+	text-align: center;
+}
+
+.similar-airbnb-border {
+	border-bottom: 1px solid grey;
+	cursor: pointer;
+}
+
+/**/
+
+.left-menu-wrapper {
+  float: left;width: 20%;
+  margin-left: 20px;
+  margin-right:10px;
+  margin-top:20px;
+  font-weight: bold;
+  background-color: lightsteelblue;
+}
+
+.submit-airbnb-button {
+  margin-left: 50px;
+  margin-top: 20px;
+  background-color: #28c76f;
+  color: white;
+  font-weight: bold;
+  padding: 10px 30px;
+}
+
+.main-container {
+  margin-left: 370px;
+  margin-top:20px;
+}
+
+.recommendation-header {
+  font-weight:bold;
+  color: crimson;
+}
+
+.index-left-menu-wrapper {
+  float: left;
+  width: 20%;
+  margin-left: 20px;
+  margin-right:10px;
+  margin-top:20px;
+  font-weight: bold;
+  background-color: lightsteelblue;
+}
+
+.price-prediction-anchor {
+  background-color: #28c76f;
+  color:white;
+  font-weight:bold;
+}
+
+.mainContainer iframe {
+  margin-top:20px;
+}
+
+.card-header-h1 {
+  font-family: Verdana;
+  font-size: 30px;
+  font-weight: bold;
+  color: azure;
+  margin-left:10px;
+  margin-right:10px;
+  background-color: #28c76f;
+  padding-top: 25px;
+  padding-bottom: 15px;
+  letter-spacing: 2px;
+}
+
+.list-group-margin {
+  margin-top: 20px;
+  margin-left: 30px;
+  margin-right: 30px;
+}
+
+.card-style-1 {
+  display: inline-block;
+  padding:10px;
+  margin-left:60px;
+  background-color: darkseagreen;
+}

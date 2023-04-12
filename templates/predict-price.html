@@ -1,0 +1,223 @@
+{% extends "layout.html" %}
+{% block title %} {{ super() }} {% endblock %}
+{% block head %}
+{{ super() }}
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous">
+    </script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+<script>
+    function validateForm() {
+        let selectedProvince = $("#provinceID").val();
+        let selectedNeighbourhood = $("#neighbourhoodID").val();
+        let roomtype = $("#roomtypeID").val();
+        let accommodates = $("#accommodateID").val();
+        let bedrooms = $("#bedroomsID").val();
+        let minimumNights = $("#minimumID").val();
+
+        if (selectedProvince == 'p0' || selectedNeighbourhood == 'n0' || roomtype == 'r0' || accommodates == 'a0') {
+            alert("Please select all the required fields!")
+            return false;
+        }
+    }
+</script>
+{% endblock %}
+{% block body %}
+<div class="accordion" {% if plot_generated_room !='NA' %} style="display: block" {% endif %} {% if
+    plot_generated_room=='NA' %} style="display: None" {% endif %} id="accordionExample">
+    <div>
+        <div class="card-header" id="headingOne">
+            <h2 class="mb-0">
+                <button style="font-weight: bold;width: auto" class="btn collapsed btn-info" type="button"
+                    data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Click here to know about our machine learning model!
+                </button>
+            </h2>
+        </div>
+
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card"
+                style="display: inline-block; padding:10px ;margin-left:60px;background-color: darkseagreen">
+                <img src="{{ regression_line }}" width="700px" alt="...">
+                <img src="{{ feature_importance_plot }}" width="700px" alt="...">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="leftMenuDiv" class="jumbotron"
+    style="float: left;width: 22%;margin-left: 20px;margin-right:10px;margin-top:20px;font-weight: bold;background-color: lightsteelblue">
+    <label style="color: red">Fields marked with * are mandatory</label><br>
+    <label> </label>
+    <form id="formID" action="/PredictPrice" onsubmit="return validateForm()" method="post">
+        <div class="form-group">
+            <label for="validationServer05">Province<span style="color: red">*</span></label>
+            <select name="provinceID" class="form-control" id="provinceID">
+                <option value="p0">Select province</option>
+                {% for province in provinces %}
+                <option value="{{ province }}" {% if sel_province==province %} selected {% endif %}>{{ province }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="validationServer05">Neighbourhood<span style="color: red">*</span></label>
+            <select name="neighbourhoodID" class="form-control" id="neighbourhoodID">
+                <option value="n0">Select neighbourhood</option>
+                {% for neighbourhood in neighbourhoods %}
+                <option value="{{ neighbourhood }}" {% if neighbourhood==sel_neighbourhood %} selected {% endif %}>{{
+                    neighbourhood }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="validationServer05">Room Type<span style="color: red">*</span></label>
+            <select name="roomtypeID" class="form-control" id="roomtypeID">
+                <option value="r0">Select room type</option>
+                {% for roomtype in roomtypes %}
+                <option value="{{ roomtype }}" {% if roomtype==sel_roomtype %} selected {% endif %}>{{ roomtype }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="validationServer05">Number of persons<span style="color: red">*</span></label>
+            <select name="accommodateID" class="form-control" id="accommodateID">
+                <option value="a0">Select number of persons</option>
+                {% for val in accommodates %}
+                <option value="{{ val }}" {% if sel_accommodates==val %} selected {% endif %}>{{ val }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">Number of bedrooms (optional) </label>
+            <select name="bedroomsID" class="form-control" id="bedroomsID">
+                <option value="b0" {% if sel_bedrooms=='b0' %} selected {% endif %}>Select number of bedrooms</option>
+                {% for val in bedrooms %}
+                <option value="{{ val }}" {% if sel_bedrooms==val %} selected {% endif %}>{{ val }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">Minimum no. of nights (optional) </label>
+            <select name="minimumID" class="form-control" id="minimumID">
+                <option value="m0" {% if sel_min=='m0' %} selected {% endif %}>Select minimum no. of nights</option>
+                {% for val in minimum_nights %}
+                <option value="{{ val }}" {% if sel_min==val %} selected {% endif %}>{{ val }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <button
+            style="margin-left: 50px;margin-top: 20px;background-color: #28c76f;color: white;font-weight: bold;padding: 10px 30px;"
+            type="submit" class="btn">Predict Airbnb Price
+        </button>
+    </form>
+
+</div>
+
+<div style="margin-left: 700px;margin-top: 40px">
+    <p style="font-family: 'Open Sans, verdana'; font-size: 17px; fill: rgb(42, 63, 95); opacity: 1; font-weight: normal; white-space: pre
+        ;color: darkblue;font-weight: bolder;
+            font-size: 27px" {% if price=='' %} hidden {% endif %}> The predicted price for desired Airbnb is: </p>
+</div>
+
+<div style="margin-left: 850px">
+    <img style="float:left;height: 60px;width:60px;" src="../static/images/logo2.png" alt="logo2">
+
+    <p style="font-family: 'Open Sans, verdana';float:bottom;margin-left:70px;color: red;font-weight: bolder;
+            font-size: 40px" {% if price=='' %} hidden {% endif %}> ${{ price }}</p>
+</div>
+
+<div id="plotRoomTypeContainer" style="margin-top:700px;margin-left: 600px;margin-top: 50px">
+
+</div>
+
+<div id="mainContainer" style="margin-left: 400px;margin-top: 50px">
+
+</div>
+
+<script>
+    let first_neighbourhood = ''
+    $(document).ready(function () {
+
+    });
+
+    $('#provinceID').change(function () {
+        var provinceID = $('#provinceID').val();
+
+        $.ajax({
+            type: "GET",
+            url: '/get_neighbourhood' + '/' + provinceID,
+            datatype: "json",
+            async: false,
+            success: function (data) {
+                // Remove old options
+                $('#neighbourhoodID').find('option').remove();
+
+                // Add new items
+                $.each(data, function (key, val) {
+                    var option_item = '<option value="' + val + '">' + val + '</option>'
+                    $('#neighbourhoodID').append(option_item);
+                });
+                first_neighbourhood = data[Object.keys(data)[0]];
+            }
+        });
+        $.getJSON(
+            '/get_roomtypes' + '/' + first_neighbourhood,
+            function (data) {
+
+                // Remove old options
+                $('#roomtypeID').find('option').remove();
+
+                // Add new items
+                $.each(data, function (key, val) {
+                    var option_item = '<option value="' + val + '">' + val + '</option>'
+                    $('#roomtypeID').append(option_item);
+                });
+            }
+        );
+    });
+
+    $('#neighbourhoodID').change(function () {
+        var neighbourhoodID = $('#neighbourhoodID').val();
+
+        // Make Ajax Request and expect JSON-encoded data
+        $.getJSON(
+            '/get_roomtypes' + '/' + neighbourhoodID,
+            function (data) {
+
+                // Remove old options
+                $('#roomtypeID').find('option').remove();
+
+                // Add new items
+                $.each(data, function (key, val) {
+                    var option_item = '<option value="' + val + '">' + val + '</option>'
+                    $('#roomtypeID').append(option_item);
+                });
+            }
+        );
+    });
+
+    plot = '{{ plot_generated_neigh }}';
+    if (plot != 'NA') {
+        let graphs = {{ plot_generated_neigh | safe
+    }};
+    Plotly.plot('mainContainer', graphs, {});
+        }
+
+    plot = '{{ plot_generated_room }}';
+    if (plot != 'NA') {
+        let graphs = {{ plot_generated_room | safe
+    }};
+    Plotly.plot('plotRoomTypeContainer', graphs, {});
+        }
+</script>
+{% endblock %}`

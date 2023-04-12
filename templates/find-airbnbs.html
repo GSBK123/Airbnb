@@ -1,0 +1,118 @@
+{% extends "layout.html" %}
+{% block title %} {{ super() }} {% endblock %}
+{% block head %}
+    {{ super() }}
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+{% endblock %}
+{% block body %}
+
+    <div id="leftMenuDiv" class="jumbotron left-menu-wrapper">
+        <form action="/GenerateMarkers" method="post">
+
+            <div class="form-group">
+                <label for="exampleFormControlSelect1">Select province:</label>
+                <select name="provinceID" class="form-control" id="provinceID">
+                    {% for province in provinces %}
+                        <option value="{{ province }}" {% if sel_province == province %} selected {% endif %} >{{ province }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlSelect1">Select neighbourhood:</label>
+                <select name="neighbourhoods" class="form-control" id="neighbourhoodID">>
+                    {% for neighbourhood in neighborhoods %}
+                        <option value="{{ neighbourhood }}" {% if neighbourhood == sel_neighbourhood %} selected {% endif %}>{{ neighbourhood }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlSelect1">Select room type:</label>
+                <select name="roomtypes" class="form-control" id="roomtypeID">>
+                    {% for roomtype in roomtypes %}
+                        <option value="{{ roomtype }}" {% if roomtype == sel_roomtype %} selected {% endif %}>{{ roomtype }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn submit-airbnb-button">Find Airbnbs
+            </button>
+        </form>
+
+    </div>
+
+    <div id="mainContainer" class="main-container">
+        {{ response_map._repr_html_() | safe}}
+    </div>
+
+    <script>
+        var selected_neighbourhood = ''
+        $(document).ready(function() {
+
+            {# change province #}
+            $('#provinceID').change(function() {
+
+                var provinceID = $('#provinceID').val();
+
+                $.ajax({
+                    type: "GET",
+                    url: '/get_neighbourhood' + '/' + provinceID,
+                    datatype: "json",
+                    async: false,
+                    success: function(data){
+                        // Remove old options
+                        $('#neighbourhoodID').find('option').remove();
+
+                        // Add new items
+                        $.each(data, function(key, val) {
+                            var option_item = '<option value="' + val + '">' + val + '</option>'
+                            $('#neighbourhoodID').append(option_item);
+                        });
+                        selected_neighbourhood = data[Object.keys(data)[0]];
+                    }
+                });
+                $.getJSON(
+                    '/get_roomtypes' + '/' + selected_neighbourhood,
+                    function(data) {
+
+                        // Remove old options
+                        $('#roomtypeID').find('option').remove();
+
+                        // Add new items
+                        $.each(data, function(key, val) {
+                            var option_item = '<option value="' + val + '">' + val + '</option>'
+                            $('#roomtypeID').append(option_item);
+                        });
+                    }
+                );
+            });
+
+            {# change neighbourhood #}
+            $('#neighbourhoodID').change(function() {
+                var neighbourhoodID = $('#neighbourhoodID').val();
+
+                // Make Ajax Request and expect JSON-encoded data
+                $.getJSON(
+                    '/get_roomtypes' + '/' + neighbourhoodID,
+                    function(data) {
+
+                        // Remove old options
+                        $('#roomtypeID').find('option').remove();
+
+                        // Add new items
+                        $.each(data, function(key, val) {
+                            var option_item = '<option value="' + val + '">' + val + '</option>'
+                            $('#roomtypeID').append(option_item);
+                        });
+                    }
+                );
+            });
+        });
+    </script>
+
+{% endblock %}`

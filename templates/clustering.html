@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block title %} {{ super() }} {% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="../static/styles/styles.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../static/js/credentials.js"></script>
+    <script type="text/javascript" src="../static/js/index.js"></script>
+{% endblock %}
+{% block body %}
+    <body onload="loadUrl()">
+    <div class="map-wrapper">
+        <input id="autocomplete" placeholder="Enter place of interest" type="text" />
+        <div id="mapid"></div>
+        <div class="similar-airbnb">
+            <h4 class="recommendation-header">Recommendations</h4>
+            <br>
+            <div id="cluster-details"></div>
+        </div>
+    </div>
+    <script id="googleMaps" async defer></script>
+    </body>
+
+{% endblock %}`
